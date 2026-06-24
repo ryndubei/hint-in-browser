@@ -7,4 +7,5 @@ cabal.project.local
 result
 dist
 .rspack-profile-*/
+www/public/rootfs.tar.zst
 tags
