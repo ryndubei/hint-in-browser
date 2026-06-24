@@ -9,15 +9,11 @@ author:             ryndubei
 maintainer:         114586905+ryndubei@users.noreply.github.com
 -- copyright:
 category:           Web
-build-type:         Hooks
+build-type:         Simple
 -- extra-doc-files:    CHANGELOG.md
 extra-source-files: www/*.js
                     www/*.html
                     www/*.css
-
-custom-setup
-    setup-depends: base
-                 , Cabal-hooks
 
 common warnings
     ghc-options: -Wall
