@@ -20,13 +20,11 @@ extra-source-files: www/*.mjs
 common warnings
     ghc-options: -Wall
 
-executable hint-in-browser
+library
     import:           warnings
-    -- main-is:          Main.hs
-    -- other-modules:
+    other-modules:    HintInBrowser
     -- other-extensions:
     build-depends:    base
                     , hint
     hs-source-dirs:   app
     default-language: GHC2024
-    ghc-options: -no-hs-main -optl-mexec-model=reactor -optl-Wl,--export=run_hint_in_browser

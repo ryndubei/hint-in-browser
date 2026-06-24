@@ -8,4 +8,6 @@ result
 dist
 .rspack-profile-*/
 www/public/rootfs.tar.zst
+www/ghc
 tags
+node_modules
