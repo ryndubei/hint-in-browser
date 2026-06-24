@@ -11,9 +11,11 @@ maintainer:         114586905+ryndubei@users.noreply.github.com
 category:           Web
 build-type:         Simple
 -- extra-doc-files:    CHANGELOG.md
-extra-source-files: www/*.js
-                    www/*.html
+extra-source-files: www/*.mjs
+                    www/*.js
                     www/*.css
+                    www/*.html
+                    www/public/favicon.png
 
 common warnings
     ghc-options: -Wall
@@ -27,4 +29,4 @@ executable hint-in-browser
                     , hint
     hs-source-dirs:   app
     default-language: GHC2024
-    ghc-options: -no-hs-main
+    ghc-options: -no-hs-main -optl-mexec-model=reactor -optl-Wl,--export=run_hint_in_browser
