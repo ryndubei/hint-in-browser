@@ -1,0 +1,10 @@
+dist-newstyle
+.envrc
+.direnv
+.vscode
+.ghc.environment.*
+cabal.project.local
+result
+dist
+.rspack-profile-*/
+tags

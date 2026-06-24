@@ -1,0 +1,8 @@
+packages:
+    hint-in-browser.cabal
+    hint/hint.cabal
+
+package *
+    shared: True
+
+write-ghc-environment-files: always
