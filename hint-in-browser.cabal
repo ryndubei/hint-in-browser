@@ -27,8 +27,11 @@ library
     build-depends:    base == 4.22.0.0
                     , hint == 0.9.0.9
                     , vector == 0.13.2.0
-                    , async
+                    -- We do not use the hashable dependency, but hint will not work
+                    -- in the browser if this project is built on without hashable
+                    -- present in the cabal store. If it is present in the store
+                    -- but not listed here, it will also mysteriously show up in
+                    -- cabal's GHC environment file anyway.
                     , hashable
-                    , unordered-containers
     hs-source-dirs:   app
     default-language: GHC2024
