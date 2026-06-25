@@ -14,5 +14,8 @@ export default defineConfig({
         publicDir: {
             name: "www/public"
         },
+    },
+    output: {
+        minify: false,
     }
 });
