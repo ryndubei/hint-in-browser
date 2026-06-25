@@ -121,12 +121,11 @@ const dyld = await main({
     }),
     searchDirs: [
         "/tmp/clib",
-        "{{HS_SEARCH_DIR}}",
-//{{CABAL_DYN_LIB_DIRS}}
+        HS_SEARCH_DIR,
         // "/tmp/hslib/lib/wasm32-wasi-ghc-9.14.0.20251031-inplace",
-    ],
-    mainSoPath: "{{MAIN_SO_PATH}}",
-    args: ["{{MAIN_SO_BASENAME}}", "+RTS", "-c", "-RTS"],
+    ].concat(CABAL_DYN_LIB_DIRS),
+    mainSoPath: MAIN_SO_PATH,
+    args: [MAIN_SO_BASE_NAME, "+RTS", "-c", "-RTS"],
     // mainSoPath: "/tmp/libplayground001.so",
     // args: ["libplayground001.so", "+RTS", "-c", "-RTS"],
     isIserv: false,
