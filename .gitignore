@@ -7,6 +7,8 @@ cabal.project.local
 result
 dist
 .rspack-profile-*/
-_www
+www/public/rootfs.tar.zst
+www/generated
+www/ghc
 tags
 node_modules

@@ -7,12 +7,12 @@ export default defineConfig({
     plugins: [pluginNodePolyfill()],
     source: {
         entry: {
-            index: './_www/index.mjs'
+            index: './www/index.mjs'
         },
     },
     server: {
         publicDir: {
-            name: "_www/public"
+            name: "www/public"
         },
     }
 });

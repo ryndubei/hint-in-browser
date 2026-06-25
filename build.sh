@@ -77,25 +77,23 @@ for pkgid in "${PKG_IDS[@]}"; do
     echo "package-id $pkgid" >> "$TMP_BUILD_DIR/tmp/ghc_env"
 done
 
-cp -rT www _www
+tar --zstd -hcf www/public/rootfs.tar.zst -C "$TMP_BUILD_DIR" .
 
-tar --zstd -hcf _www/public/rootfs.tar.zst -C "$TMP_BUILD_DIR" .
+mkdir -p www/generated
+touch www/generated/constants.js
 
-mkdir -p _www/generated
-touch _www/generated/constants.js
-
-echo "export const HS_SEARCH_DIR = \"$HS_SEARCHDIR\";" >> _www/generated/constants.mjs
+echo "export const HS_SEARCH_DIR = \"$HS_SEARCHDIR\";" >> www/generated/constants.mjs
 
 MAIN_PKG_SO_PATH="$(realpath "$(find "$MAIN_DYNLIB_DIR" -type f -name "*.so" -print0)")"
-echo "export const MAIN_SO_PATH = \"$MAIN_PKG_SO_PATH\";" >> _www/generated/constants.mjs
-echo "export const MAIN_SO_BASE_NAME = \"$(basename "$MAIN_PKG_SO_PATH")\";" >> _www/generated/constants.mjs
+echo "export const MAIN_SO_PATH = \"$MAIN_PKG_SO_PATH\";" >> www/generated/constants.mjs
+echo "export const MAIN_SO_BASE_NAME = \"$(basename "$MAIN_PKG_SO_PATH")\";" >> www/generated/constants.mjs
 
-echo "export const CABAL_DYN_LIB_DIRS = [$(printf '\"%s\", ' "${DYN_LIB_DIRS[@]}")]" >> _www/generated/constants.mjs
+echo "export const CABAL_DYN_LIB_DIRS = [$(printf '\"%s\", ' "${DYN_LIB_DIRS[@]}")]" >> www/generated/constants.mjs
 
 # Add other necessary js modules
-mkdir -p _www/ghc
-cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/dyld.mjs _www/ghc
-cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/post-link.mjs _www/ghc
-cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/prelude.mjs _www/ghc
+mkdir -p www/ghc
+cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/dyld.mjs www/ghc
+cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/post-link.mjs www/ghc
+cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/prelude.mjs www/ghc
 
 rsbuild "$@"
