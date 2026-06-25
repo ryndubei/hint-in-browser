@@ -121,6 +121,7 @@ const dyld = await main({
     searchDirs: [
         "/tmp/clib",
         "{{HS_SEARCH_DIR}}",
+//{{CABAL_DYN_LIB_DIRS}}
         // "/tmp/hslib/lib/wasm32-wasi-ghc-9.14.0.20251031-inplace",
     ],
     mainSoPath: "{{MAIN_SO_PATH}}",

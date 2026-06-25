@@ -23,12 +23,15 @@ for db in "${PKG_DBS[@]}"; do
     PKG_DB_ARGS+=(--package-db="$db")
 done
 
+DYN_LIB_DIRS=()
+
 for pkgid in "${PKG_IDS[@]}"; do
     # may fail to find boot libraries. this is fine because they are in libdir, so we suppress failure with echo ''
     for dir in $(wasm32-wasi-ghc-pkg "${PKG_DB_ARGS[@]}" field --unit-id "$pkgid" dynamic-library-dirs --simple-output || echo ''); do
         # have to preserve absolute paths for cabal packages
         mkdir -p "$TMP_BUILD_DIR/$(dirname "$dir")"
         cp --no-preserve=mode -r "$dir" "$TMP_BUILD_DIR/$(dirname "$dir")"
+        DYN_LIB_DIRS+=("$dir")
     done
 done
 
@@ -81,6 +84,7 @@ MAIN_PKG_SO_PATH="$(realpath "$(find "$MAIN_DYNLIB_DIR" -type f -name "*.so" -pr
 sed -i "s|{{HS_SEARCH_DIR}}|$HS_SEARCHDIR|" www/index.mjs
 sed -i "s|{{MAIN_SO_PATH}}|$MAIN_PKG_SO_PATH|" www/index.mjs
 sed -i "s|{{MAIN_SO_BASENAME}}|$(basename "$MAIN_PKG_SO_PATH")|" www/index.mjs
+sed -i "s|//{{CABAL_DYN_LIB_DIRS}}|$(printf '        \"%s\",\\n' "${DYN_LIB_DIRS[@]}")|" www/index.mjs
 
 # Add other necessary js modules
 mkdir -p www/ghc
