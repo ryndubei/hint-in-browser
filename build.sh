@@ -78,9 +78,9 @@ tar --zstd -hcf www/public/rootfs.tar.zst -C "$TMP_BUILD_DIR" .
 
 # Replace hardcoded paths if necessary
 MAIN_PKG_SO_PATH="$(realpath "$(find "$MAIN_DYNLIB_DIR" -type f -name "*.so" -print0)")"
-sed -i "s|/tmp/hslib/lib/wasm32-wasi-ghc-9.14.1.20260330-4b5d|$HS_SEARCHDIR|" www/index.mjs
-sed -i "s|/libHShint-in-browser-0.1.0.0-inplace-ghc9.14.1.20260330.so|$MAIN_PKG_SO_PATH|" www/index.mjs
-sed -i "s|libHShint-in-browser-0.1.0.0-inplace-ghc9.14.1.20260330.so|$(basename "$MAIN_PKG_SO_PATH")|" www/index.mjs
+sed -i "s|{{HS_SEARCH_DIR}}|$HS_SEARCHDIR|" www/index.mjs
+sed -i "s|{{MAIN_SO_PATH}}|$MAIN_PKG_SO_PATH|" www/index.mjs
+sed -i "s|{{MAIN_SO_BASENAME}}|$(basename "$MAIN_PKG_SO_PATH")|" www/index.mjs
 
 # Add other necessary js modules
 mkdir -p www/ghc
