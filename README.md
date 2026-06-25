@@ -15,5 +15,6 @@ git clone --recurse-submodules https://github.com/ryndubei/hint-in-browser
 cd hint-in-browser
 nix develop
 npm install
+wasm32-wasi-cabal update
 npm run dev
 ```
