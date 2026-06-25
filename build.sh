@@ -80,9 +80,8 @@ done
 tar --zstd -hcf www/public/rootfs.tar.zst -C "$TMP_BUILD_DIR" .
 
 mkdir -p www/generated
-touch www/generated/constants.js
 
-echo "export const HS_SEARCH_DIR = \"$HS_SEARCHDIR\";" >> www/generated/constants.mjs
+echo "export const HS_SEARCH_DIR = \"$HS_SEARCHDIR\";" > www/generated/constants.mjs
 
 MAIN_PKG_SO_PATH="$(realpath "$(find "$MAIN_DYNLIB_DIR" -type f -name "*.so" -print0)")"
 echo "export const MAIN_SO_PATH = \"$MAIN_PKG_SO_PATH\";" >> www/generated/constants.mjs
