@@ -24,8 +24,8 @@ library
     import:           warnings
     other-modules:    HintInBrowser
     -- other-extensions:
-    build-depends:    base
-                    , hint
-                    , vector
+    build-depends:    base == 4.22.0.0
+                    , hint == 0.9.0.9
+                    , vector == 0.13.2.0
     hs-source-dirs:   app
     default-language: GHC2024
