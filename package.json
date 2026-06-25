@@ -12,6 +12,7 @@
     "preview": "rsbuild preview"
   },
   "dependencies": {
+    "@bjorn3/browser_wasi_shim": "file:browser_wasi_shim",
     "@xterm/xterm": "^6.0.0",
     "xterm-pty": "^0.12.0"
   },

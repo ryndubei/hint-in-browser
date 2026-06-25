@@ -4,7 +4,7 @@ import {
     OpenFile,
     PreopenDirectory,
     Directory,
-} from "https://esm.sh/gh/haskell-wasm/browser_wasi_shim";
+} from '@bjorn3/browser_wasi_shim';
 import { DyLDBrowserHost, main } from "./ghc/dyld.mjs"
 import { Terminal } from '@xterm/xterm'
 import { openpty, Flags } from 'xterm-pty'

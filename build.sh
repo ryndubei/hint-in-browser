@@ -95,4 +95,7 @@ cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/dyld.mjs www/ghc
 cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/post-link.mjs www/ghc
 cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/prelude.mjs www/ghc
 
+# Vendor URL imports
+sed -i "s|\"https://esm.sh/gh/haskell-wasm/browser_wasi_shim\"|'@bjorn3/browser_wasi_shim'|" www/ghc/dyld.mjs
+
 rsbuild "$@"

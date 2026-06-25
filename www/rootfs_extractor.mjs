@@ -4,7 +4,7 @@ import {
     OpenFile,
     PreopenDirectory,
     WASI,
-} from "https://esm.sh/gh/haskell-wasm/browser_wasi_shim";
+} from '@bjorn3/browser_wasi_shim'
 
 const rootfs = new PreopenDirectory("/", []);
 
