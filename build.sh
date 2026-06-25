@@ -77,7 +77,7 @@ for pkgid in "${PKG_IDS[@]}"; do
     echo "package-id $pkgid" >> "$TMP_BUILD_DIR/tmp/ghc_env"
 done
 
-cp -r www _www
+cp -rT www _www
 
 tar --zstd -hcf _www/public/rootfs.tar.zst -C "$TMP_BUILD_DIR" .
 
