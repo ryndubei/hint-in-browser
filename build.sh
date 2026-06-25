@@ -77,19 +77,21 @@ for pkgid in "${PKG_IDS[@]}"; do
     echo "package-id $pkgid" >> "$TMP_BUILD_DIR/tmp/ghc_env"
 done
 
-tar --zstd -hcf www/public/rootfs.tar.zst -C "$TMP_BUILD_DIR" .
+cp -r www _www
+
+tar --zstd -hcf _www/public/rootfs.tar.zst -C "$TMP_BUILD_DIR" .
 
 # Replace hardcoded paths if necessary
 MAIN_PKG_SO_PATH="$(realpath "$(find "$MAIN_DYNLIB_DIR" -type f -name "*.so" -print0)")"
-sed -i "s|{{HS_SEARCH_DIR}}|$HS_SEARCHDIR|" www/index.mjs
-sed -i "s|{{MAIN_SO_PATH}}|$MAIN_PKG_SO_PATH|" www/index.mjs
-sed -i "s|{{MAIN_SO_BASENAME}}|$(basename "$MAIN_PKG_SO_PATH")|" www/index.mjs
-sed -i "s|//{{CABAL_DYN_LIB_DIRS}}|$(printf '        \"%s\",\\n' "${DYN_LIB_DIRS[@]}")|" www/index.mjs
+sed -i "s|{{HS_SEARCH_DIR}}|$HS_SEARCHDIR|" _www/index.mjs
+sed -i "s|{{MAIN_SO_PATH}}|$MAIN_PKG_SO_PATH|" _www/index.mjs
+sed -i "s|{{MAIN_SO_BASENAME}}|$(basename "$MAIN_PKG_SO_PATH")|" _www/index.mjs
+sed -i "s|//{{CABAL_DYN_LIB_DIRS}}|$(printf '        \"%s\",\\n' "${DYN_LIB_DIRS[@]}")|" _www/index.mjs
 
 # Add other necessary js modules
-mkdir -p www/ghc
-cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/dyld.mjs www/ghc
-cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/post-link.mjs www/ghc
-cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/prelude.mjs www/ghc
+mkdir -p _www/ghc
+cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/dyld.mjs _www/ghc
+cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/post-link.mjs _www/ghc
+cp --no-preserve=mode "$(wasm32-wasi-ghc --print-libdir)"/prelude.mjs _www/ghc
 
 rsbuild "$@"
