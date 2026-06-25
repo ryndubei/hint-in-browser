@@ -81,12 +81,16 @@ cp -r www _www
 
 tar --zstd -hcf _www/public/rootfs.tar.zst -C "$TMP_BUILD_DIR" .
 
-# Replace hardcoded paths if necessary
+mkdir -p _www/generated
+touch _www/generated/constants.js
+
+echo "export const HS_SEARCH_DIR = \"$HS_SEARCHDIR\";" >> _www/generated/constants.js
+
 MAIN_PKG_SO_PATH="$(realpath "$(find "$MAIN_DYNLIB_DIR" -type f -name "*.so" -print0)")"
-sed -i "s|{{HS_SEARCH_DIR}}|$HS_SEARCHDIR|" _www/index.mjs
-sed -i "s|{{MAIN_SO_PATH}}|$MAIN_PKG_SO_PATH|" _www/index.mjs
-sed -i "s|{{MAIN_SO_BASENAME}}|$(basename "$MAIN_PKG_SO_PATH")|" _www/index.mjs
-sed -i "s|//{{CABAL_DYN_LIB_DIRS}}|$(printf '        \"%s\",\\n' "${DYN_LIB_DIRS[@]}")|" _www/index.mjs
+echo "export const MAIN_SO_PATH = \"$MAIN_PKG_SO_PATH\";" >> _www/generated/constants.js
+echo "export const MAIN_SO_BASE_NAME = \"$(basename "$MAIN_PKG_SO_PATH")\";" >> _www/generated/constants.js
+
+echo "export const CABAL_DYN_LIB_DIRS = [$(printf '\"%s\", ' "${DYN_LIB_DIRS[@]}")]" >> _www/generated/constants.js
 
 # Add other necessary js modules
 mkdir -p _www/ghc

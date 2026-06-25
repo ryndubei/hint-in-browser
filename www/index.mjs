@@ -9,6 +9,7 @@ import { DyLDBrowserHost, main } from "./ghc/dyld.mjs"
 import { Terminal } from '@xterm/xterm'
 import { openpty, Flags } from 'xterm-pty'
 import RootfsExtractorWorker from './rootfs_extractor.mjs?worker';
+import { HS_SEARCH_DIR, MAIN_SO_PATH, MAIN_SO_BASE_NAME, CABAL_DYN_LIB_DIRS } from './generated/constants.mjs';
 
 import './xterm.css';
 import './index.css';
