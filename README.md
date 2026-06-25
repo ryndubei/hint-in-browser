@@ -4,7 +4,8 @@ Heavily based on Cheng Shao's [ghc-api-browser test in the GHC test suite](https
 
 Not currently interactive, read `app/HintInBrowser.hs` to understand what is going on.
 
-[`hint`](https://hackage.haskell.org/package/hint) almost works out of the box but required a couple minor changes, hence the submodule.
+[`hint`](https://hackage.haskell.org/package/hint) almost works out of the box
+but required a couple minor changes, hence the use of a fork in `cabal.project`.
 
 ### Building and runninig
 
