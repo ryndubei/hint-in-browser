@@ -84,13 +84,13 @@ tar --zstd -hcf _www/public/rootfs.tar.zst -C "$TMP_BUILD_DIR" .
 mkdir -p _www/generated
 touch _www/generated/constants.js
 
-echo "export const HS_SEARCH_DIR = \"$HS_SEARCHDIR\";" >> _www/generated/constants.js
+echo "export const HS_SEARCH_DIR = \"$HS_SEARCHDIR\";" >> _www/generated/constants.mjs
 
 MAIN_PKG_SO_PATH="$(realpath "$(find "$MAIN_DYNLIB_DIR" -type f -name "*.so" -print0)")"
-echo "export const MAIN_SO_PATH = \"$MAIN_PKG_SO_PATH\";" >> _www/generated/constants.js
-echo "export const MAIN_SO_BASE_NAME = \"$(basename "$MAIN_PKG_SO_PATH")\";" >> _www/generated/constants.js
+echo "export const MAIN_SO_PATH = \"$MAIN_PKG_SO_PATH\";" >> _www/generated/constants.mjs
+echo "export const MAIN_SO_BASE_NAME = \"$(basename "$MAIN_PKG_SO_PATH")\";" >> _www/generated/constants.mjs
 
-echo "export const CABAL_DYN_LIB_DIRS = [$(printf '\"%s\", ' "${DYN_LIB_DIRS[@]}")]" >> _www/generated/constants.js
+echo "export const CABAL_DYN_LIB_DIRS = [$(printf '\"%s\", ' "${DYN_LIB_DIRS[@]}")]" >> _www/generated/constants.mjs
 
 # Add other necessary js modules
 mkdir -p _www/ghc
