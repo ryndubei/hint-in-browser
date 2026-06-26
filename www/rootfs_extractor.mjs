@@ -20,12 +20,19 @@ const bsdtar_wasi = new WASI(
     { debug: false }
 );
 
+const rootfs_stream = new Promise(res => {
+    onmessage = (e) => {
+        res(e.data)
+        onmessage = null;
+    }
+});
+
 const [{ instance }, rootfs_bytes] = await Promise.all([
     WebAssembly.instantiateStreaming(
         fetch("/bsdtar.wasm"),
         { wasi_snapshot_preview1: bsdtar_wasi.wasiImport }
     ),
-    fetch("/rootfs.tar.zst").then((r) => r.bytes()),
+    rootfs_stream.then(stream => new Response(stream).arrayBuffer())
 ]);
 
 bsdtar_wasi.fds[0] = new OpenFile(
@@ -35,8 +42,6 @@ bsdtar_wasi.fds[0] = new OpenFile(
 const wasi_result = bsdtar_wasi.start(instance);
 
 if (wasi_result === 0) {
-    console.log("Rootfs extracted")
-
     postMessage(rootfs)
 } else {
     throw new Error("Failed to extract rootfs")

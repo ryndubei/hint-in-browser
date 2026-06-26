@@ -71,9 +71,27 @@ if (!"WebAssembly" in window) {
     term_logger.log("WebAssembly present")
 }
 
+const [[rootfs_stream1, rootfs_stream2], rootfsStreamLength] = await fetch("/rootfs.tar.zst")
+    .then((r) => {
+        console.log(r);
+        return [r.body.tee(), r.headers.get('content-length')];
+    });
+
 term_logger.log("Fetching and extracting rootfs...")
 
 const rootfs_extractor_worker = new Worker(new URL('./rootfs_extractor.mjs', import.meta.url));
+
+rootfs_extractor_worker.postMessage(rootfs_stream2, [rootfs_stream2])
+
+var progress = 0
+
+slave.write(`0.0 /${(rootfsStreamLength / (1024 * 1024)).toFixed(1)}MiB`)
+for await (const chunk of rootfs_stream1) {
+    progress += chunk.length;
+    slave.write(`\r${(progress / (1024 * 1024)).toFixed(1)}`)
+}
+slave.write('\n')
+term_logger.log("rootfs.tar.zst downloaded")
 
 // mutably convert the received rootfs back to a PreopenDirectory
 // needed because worker thread messages lose the class methods
