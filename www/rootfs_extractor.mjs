@@ -41,8 +41,4 @@ bsdtar_wasi.fds[0] = new OpenFile(
 
 const wasi_result = bsdtar_wasi.start(instance);
 
-if (wasi_result === 0) {
-    postMessage(rootfs)
-} else {
-    throw new Error("Failed to extract rootfs")
-}
+postMessage({wasi_result, rootfs})

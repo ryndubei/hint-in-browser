@@ -64,9 +64,14 @@ term_logger.error = function (data, cb) {
     console.error(data)
     slave.write(`${data}\n`, cb)
 }
+term_logger.crash = function (data, cb) {
+    console.error(data)
+    slave.write(`${data}\n`, cb)
+    throw new Error(`${data}`)
+}
 
 if (!"WebAssembly" in window) {
-    await term_logger.error("No WebAssembly", () => { throw new Error("No WebAssembly") })
+    term_logger.crash("No WebAssembly")
 } else {
     term_logger.log("WebAssembly present")
 }
@@ -102,11 +107,11 @@ function objectToFs(rfs) {
             // is a directory
             if ('contents' in ino) {
                 m.set(k, new Directory(go(ino.contents)))
-            // is a file
+                // is a file
             } else if ('data' in ino) {
                 m.set(k, new File(ino.data))
             } else {
-                throw new Error("objectToFs: unexpected structure")
+                term_logger.crash("objectToFs: unexpected structure")
             }
         }
 
@@ -116,9 +121,15 @@ function objectToFs(rfs) {
     return new PreopenDirectory("/", go(rfs.dir.contents))
 }
 
-const rootfs = objectToFs(await new Promise(res => {
-    rootfs_extractor_worker.onmessage = msg => res(msg.data)
-}))
+const rootfs = await new Promise(res => {
+    rootfs_extractor_worker.onmessage = msg => {
+        if (msg.data.wasi_result === 0) {
+            res(objectToFs(msg.data.rootfs))
+        } else {
+            term_logger.crash(`Failed to extract rootfs: ${msg.data.wasi_result}`)
+        }
+    }
+})
 
 term_logger.log("rootfs extracted")
 
@@ -128,29 +139,28 @@ if (document.readyState === "loading") {
     );
 }
 
-term_logger.log("Document loaded")
-
-const dyld = await main({
-    rpc: new DyLDBrowserHost({
-        rootfs,
-        stdout: msg => term_logger.info(`${msg}`),
-        stderr: msg => term_logger.warn(`${msg}`)
-    }),
-    searchDirs: [
-        "/tmp/clib",
-        HS_SEARCH_DIR,
-        // "/tmp/hslib/lib/wasm32-wasi-ghc-9.14.0.20251031-inplace",
-    ].concat(CABAL_DYN_LIB_DIRS),
-    mainSoPath: MAIN_SO_PATH,
-    args: [MAIN_SO_BASE_NAME, "+RTS", "-c", "-RTS"],
-    // mainSoPath: "/tmp/libplayground001.so",
-    // args: ["libplayground001.so", "+RTS", "-c", "-RTS"],
-    isIserv: false,
-});
-
-term_logger.log("DyLDBrowserHost loaded")
-
+term_logger.log("Initialising DyLDBrowserHost...")
 try {
+    const dyld = await main({
+        rpc: new DyLDBrowserHost({
+            rootfs,
+            stdout: msg => term_logger.info(`${msg}`),
+            stderr: msg => term_logger.warn(`${msg}`)
+        }),
+        searchDirs: [
+            "/tmp/clib",
+            HS_SEARCH_DIR,
+            // "/tmp/hslib/lib/wasm32-wasi-ghc-9.14.0.20251031-inplace",
+        ].concat(CABAL_DYN_LIB_DIRS),
+        mainSoPath: MAIN_SO_PATH,
+        args: [MAIN_SO_BASE_NAME, "+RTS", "-c", "-RTS"],
+        // mainSoPath: "/tmp/libplayground001.so",
+        // args: ["libplayground001.so", "+RTS", "-c", "-RTS"],
+        isIserv: false,
+    });
+
+    term_logger.log("DyLDBrowserHost loaded")
+
     await dyld.exportFuncs.run_hint_in_browser();
 } catch (err) {
     term_logger.error(`${err}`)
