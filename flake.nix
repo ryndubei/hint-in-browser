@@ -19,9 +19,14 @@
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = [ ghc-wasm-meta.packages.${system}.all_9_14 ];
       };
-      packages.x86_64-linux.pkgsCross.wasi32.zstd-wasm = pkgs.callPackage ./zstd-wasm.nix {
-        ghc-wasm-meta = ghc-wasm-meta.packages.${system}.all_9_14;
+      packages.x86_64-linux.pkgsCross.wasi32 = rec {
+        zstd-wasm = pkgs.callPackage ./zstd-wasm.nix {
+          ghc-wasm-meta = ghc-wasm-meta.packages.${system}.all_9_14;
+        };
+        bsdtar-wasm = pkgs.callPackage ./bsdtar-wasm.nix {
+          inherit zstd-wasm;
+          ghc-wasm-meta = ghc-wasm-meta.packages.${system}.all_9_14;
+        };
       };
-      packages.x86_64-linux.pkgsCross.wasi32.bsdtar-wasm = abort "todo";
     };
 }
