@@ -17,7 +17,9 @@
     in
     {
       devShells.${system}.default = pkgs.mkShell {
-        buildInputs = [ ghc-wasm-meta.packages.${system}.all_9_14 ];
+        buildInputs = [
+          ghc-wasm-meta.packages.${system}.all_9_14
+        ];
       };
       packages.x86_64-linux.pkgsCross.wasi32 = rec {
         zstd-wasm = pkgs.callPackage ./zstd-wasm.nix {
