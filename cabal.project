@@ -10,7 +10,7 @@ write-ghc-environment-files: always
 source-repository-package
     type: git
     location: https://github.com/ryndubei/hint.git
-    tag: d2e6318d4d44d4ac7b2a186297fba042024349e3
+    tag: b67172c5339cf3bdfbcd8713d979c9cf4b31421a
 
 -- source-repository-package
 --     type: git
