@@ -1,10 +1,14 @@
+{-# LANGUAGE CPP #-}
 module HintInBrowser (runHintInBrowser) where
 
 import Language.Haskell.Interpreter
 import Language.Haskell.Interpreter.Unsafe
 import qualified Data.Vector as V
 
+
+#if defined(wasi_HOST_OS)
 foreign export javascript "run_hint_in_browser" runHintInBrowser :: IO ()
+#endif
 
 runHintInBrowser :: IO ()
 runHintInBrowser = do
