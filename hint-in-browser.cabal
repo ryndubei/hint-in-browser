@@ -27,5 +27,6 @@ library
     build-depends:    base
                     , hint
                     , vector
+                    , vty-wasi
     hs-source-dirs:   app
     default-language: GHC2024

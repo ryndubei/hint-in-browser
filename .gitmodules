@@ -2,3 +2,6 @@
 	path = browser_wasi_shim
 	url = https://github.com/haskell-wasm/browser_wasi_shim.git
 	fetchRecurseSubmodules = false
+[submodule "vty-wasi"]
+	path = vty-wasi
+	url = https://github.com/ryndubei/vty-wasi
