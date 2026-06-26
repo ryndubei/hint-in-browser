@@ -8,6 +8,7 @@ result
 dist
 .rspack-profile-*/
 www/public/rootfs.tar.zst
+www/public/bsdtar.wasm
 www/generated
 www/ghc
 tags

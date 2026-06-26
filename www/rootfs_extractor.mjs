@@ -22,7 +22,7 @@ const bsdtar_wasi = new WASI(
 
 const [{ instance }, rootfs_bytes] = await Promise.all([
     WebAssembly.instantiateStreaming(
-        fetch("https://haskell-wasm.github.io/bsdtar-wasm/bsdtar.wasm"),
+        fetch("/bsdtar.wasm"),
         { wasi_snapshot_preview1: bsdtar_wasi.wasiImport }
     ),
     fetch("/rootfs.tar.zst").then((r) => r.bytes()),
